@@ -126,16 +126,20 @@ from copy import deepcopy
 
 MAP = {'.': '0', '#': '1'}
 
-def solve(inp, padding):
+def solve(inp):
     inp = inp.strip().split('\n')
     inp = list(map(list, inp))
     algo = inp[0]
     image = inp[2:]
 
-    image = add_padding(padding, image)
+    num_iterations = 50
+
+    # Final padding needs to have room for 1 px growth in each dimension per iteration
+    height = len(image) + 2 * num_iterations
+    width = len(image[0]) + 2 * num_iterations
+    image = add_padding_with_bounds(height, width, image)
     new_image = deepcopy(image)
 
-    num_iterations = 50
     for x in range(num_iterations):
         for i in range(len(image)):
             for j in range(len(image[0])):
@@ -162,23 +166,22 @@ def neighboring_pixels(image, i, j):
     return pixels
 
 
-
 def count_pixels(img):
     return sum(sum(i == '#' for i in l) for l in img)
 
 
-def add_padding(n, grid):
+def add_padding_with_bounds(height, width, grid):
     padded = []
-    middle = n // 2
-    for i in range(n * len(grid)):
-        line = []
-        for j in range(n * len(grid[0])):
-            line.append('.')
-        padded.append(line)
-    # insert the grid in the middle:
+    for i in range(height):
+        padded.append(['.' for j in range(width)])
+
+    # Insert the grid in the middle
+    height_offset = height // 2 - len(grid) // 2
+    width_offset = width // 2 - len(grid[0]) // 2
+
     for i in range(len(grid)):
         for j in range(len(grid[0])):
-            padded[i + middle * len(grid)][j + middle * len(grid[0])] = grid[i][j]
+            padded[i + height_offset][j + width_offset] = grid[i][j]
     return padded
 
 
@@ -187,10 +190,9 @@ def img_str(grid):
 
 
 if __name__=='__main__':
-    # Picked amounts of padding kind of arbitrarily until it worked
-    example_ans = solve(example, 25)
+    example_ans = solve(example)
     print(f'example:\n {example_ans}')
 
-    actual_ans = solve(actual, 3)
+    actual_ans = solve(actual)
     print(f'actual:\n {actual_ans}')
 
