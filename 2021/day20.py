@@ -121,6 +121,7 @@ actual = """
 .#...#.####...##..#.#.####.###..#.#.#..####.###.####.##.#.#.##...#.#...#..#.##.......#....#..###...#
 """
 
+
 from copy import deepcopy
 
 MAP = {'.': '0', '#': '1'}
@@ -134,17 +135,32 @@ def solve(inp, padding):
     image = add_padding(padding, image)
     new_image = deepcopy(image)
 
-    num_iterations = 50 
+    num_iterations = 50
     for x in range(num_iterations):
         for i in range(len(image)):
             for j in range(len(image[0])):
-                pixels = [MAP[image[ni][nj]] for ni, nj in neighbors(image, i, j)]
-                idx = int(''.join(pixels), 2) 
+                pixels = neighboring_pixels(image, i, j)
+                idx = int(pixels, 2)
                 new_image[i][j] = algo[idx]
+        tmp = image
+        image = new_image
+        new_image = tmp
     
-        image = deepcopy(new_image)
-    
-    return count_pixels(new_image)
+    return count_pixels(image)
+
+
+def neighboring_pixels(image, i, j):
+    pixels = ''
+    # Any pixel beyond the bounds of the image should match the corner
+    fallback_value = MAP[image[0][0]]
+    for x in range(i-1, i+2):
+        for y in range(j-1, j+2):
+            if 0 <= x < len(image) and 0 <= y < len(image[0]):
+                pixels += MAP[image[x][y]]
+            else:
+                pixels += fallback_value
+    return pixels
+
 
 
 def count_pixels(img):
