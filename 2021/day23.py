@@ -79,6 +79,9 @@ def solve(inp):
                 continue
             if POSITIONS[v] == col and is_done(state, row, col): 
                 continue
+            if state[row-1][col] in POSITIONS:
+                # This amphipod is blocked
+                continue
             pos_steps = all_steps(state, row, col, cost)
             for new_cost, steps in pos_steps:
                 new_state = copy_state(state)
