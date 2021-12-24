@@ -454,16 +454,16 @@ def process_input(w, z, x_addend, y_addend, z_divisor):
 
 
 # Some methods for manual checking
-def z_div1_outputs(i):
+def z_div1_outputs(i, blocks):
     for j in range(1,10):
-        z = process_input(j, 0, x_addends[i], y_addends[i], z_divisors[i])
+        z = process_input(j, 0, blocks[i].x_addend, blocks[i].y_addend, blocks[i].z_divisor)
         print(f'Got z: {z} for j = {j}')
 
 
-def z_div26_outputs(i, zmin, zmax):
+def z_div26_outputs(i, zmin, zmax, blocks):
     for z in range(zmin, zmax+1):
         for j in range(1,10):
-            result = process_input(j, z, x_addends[i], y_addends[i], z_divisors[i])
+            result = process_input(j, z, blocks[i].x_addend, blocks[i].y_addend, blocks[i].z_divisor)
             if result == 0:
                 print(f'Got result {result} for w={j}, z = {z}')
 
