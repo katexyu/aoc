@@ -275,8 +275,16 @@ mul y x
 add z y
 """
 
-import sys
-
+"""
+This problem was a real doozy. I tried brute forcing at first, which seemed like
+it would take far too long. I then looked at the instructions and noticed that
+it was repeating the same block of instructions with different arguments 14
+times. I played around with various inputs and noticed that if you could get
+the x value to equal w, then z would decrease in size for blocks with z div 26.
+However, all blocks with `z div 1` would increase the z, so in order to solve
+the problem, we need to match up any increase in z with a corresponding decrease
+such that the final result is zero.
+"""
 def solve(inp, find_min=False):
     inp = inp.strip().split('\n')
     inp = list(map(parse_line, inp))
