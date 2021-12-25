@@ -327,26 +327,6 @@ class Input(Expression):
         return 9
     
 
-class Variable(Expression):
-    def __init__(self, name):
-        self.name = name
-
-    def simplify(self) -> Expression:
-        return self
-
-    def __repr__(self):
-        return f'{self.name}'
-
-    def iszero(self):
-        return False
-
-    def min(self):
-        return sys.minsize
-    
-    def max(self):
-        return sys.maxsize
-
-
 class Literal(Expression):
     def __init__(self, val):
         self.val = val
@@ -510,9 +490,8 @@ class Quotient(Expression):
                 return left.left
         if isinstance(self.left, Sum):
             return Sum(Quotient(self.left.left, self.right).simplify(), Quotient(self.left.right, self.right).simplify()).simplify()
+        return Quotient(left, right)
 
-        return Quotient(left, right).distribute_divisors()
-        
     def __repr__(self):
         return f'({self.left} / {self.right})'
 
@@ -650,7 +629,7 @@ def extract_equality_conditions(inp):
             arg2 = get_arg(args[1], stored_vars)
             var_name = args[0]
             expr = Eq(arg1, arg2).simplify()
-            # Try to extract the an input equality that can be satisfied, and replace it in the register with a
+            # Try to extract an input equality that can be satisfied, and replace it in the register with a
             # Literal(1)
             input_eqn, val = expr.extract_input_eqn()
             if input_eqn is not None:
@@ -726,8 +705,6 @@ def process_alu(instructions, inputs):
 def get_arg_value(stored_vars, arg):
     if isinstance(arg, int):
         return arg
-    if arg.isnumeric():
-        return int(arg)
     return stored_vars[arg]
 
 
