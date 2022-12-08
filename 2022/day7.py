@@ -4,6 +4,8 @@ from itertools import *
 from math import *
 from heapq import heappush, heappop, heappushpop, heapify, heapreplace
 from functools import cache
+from dataclasses import dataclass, field
+import os
 
 
 example = """
@@ -991,28 +993,31 @@ $ ls
 67650 ggvj.bwz
 """
 
-class File:
-    def __init__(self, name, size, is_directory):
-        self.name = name
-        self.size = size
-        self.is_directory = is_directory
-    
 
-    def size(self):
+@dataclass
+class File:
+    name: str
+    size: int
+    parent: str
+
+    def total_size(self):
         return self.size
 
 
-    def __repr__(self):
-        return f"Name={self.name}, size={self.size}, is_directory={self.is_directory}"
+@dataclass
+class Directory(File):
+    contains: list[File] = field(default_factory=list)
+
+    def total_size(self):
+        return sum(f.total_size() for f in self.contains)
+
 
 def compute_filesystem(inp):
     inp = inp.strip().split('\n')
     cwd = '/'
-    parents = dict()
-    files = dict() 
-    contains = defaultdict(list)
+    dirs = dict()
 
-    files['/'] = File('/', 0, True)
+    dirs['/'] = Directory('/', 0, None)
     for cmd in inp:
         tokens = cmd.split(' ')
         if tokens[0] == '$' and tokens[1] == 'cd':
@@ -1020,55 +1025,46 @@ def compute_filesystem(inp):
             if path == '/':
                 cwd = '/'
             elif path == '..' and cwd != '/':
-                cwd = parents[cwd]
+                cwd = dirs[cwd].parent
             else:
-                full_path = cwd + '/' + path
-                parents[full_path] = cwd
+                full_path = os.path.join(cwd, path)
+                dirs[full_path].parent = cwd
                 cwd = full_path
-        elif tokens[1] == 'ls':
-            # do nothing
-            pass
+        elif tokens[0] == '$' and tokens[1] == 'ls':
+            # clear the current contains in case of multiple ls
+            dirs[cwd].contains = []
         else:
-            # we are listing out the contents of cwd
+            # Listing out the contents of cwd
+            name = os.path.join(cwd, tokens[1])
             if tokens[0] == 'dir':
-                name = cwd + '/' + tokens[1]
-                file = File(name, 0, True)
-                contains[cwd].append(file)
-                files[file.name] = file
+                file = Directory(name, 0, cwd)
+                dirs[file.name] = file
             else:
                 size = int(tokens[0])
-                name = cwd + '/' + tokens[1]
-                file = File(name, size, False)
-                contains[cwd].append(file)
-                files[file.name] = file
+                file = File(name, size, cwd)
+
+            dirs[cwd].contains.append(file)
 
     return {
-        n: compute_size(f, contains) for n, f in files.items()
-    }, files
+        n: f.total_size() for n, f in dirs.items()
+    }
 
 
 def solvea(inp):
-    sizes, files = compute_filesystem(inp)    
-    filtered_items = list((n,s) for n,s in sizes.items() if s <= 100000 and files[n].is_directory) 
-    return sum(s for n, s in filtered_items)
+    sizes = compute_filesystem(inp)
+    filtered_sizes = list(s for n,s in sizes.items() if s <= 100000)
+    return sum(s for s in filtered_sizes)
 
 
 def solve(inp): 
-    sizes, files = compute_filesystem(inp)
+    sizes = compute_filesystem(inp)
 
     target = 30000000 
     left = 70000000 - sizes['/']
     delta = target - left
 
-    filtered_items = sorted(list(s for n,s in sizes.items() if s >= delta and files[n].is_directory))
-    return filtered_items[0]
-
-
-def compute_size(file, contains):
-    if not file.is_directory:
-        return file.size
-    children = contains[file.name]
-    return sum(compute_size(c, contains) for c in children)
+    filtered_sizes = sorted(list(s for n,s in sizes.items() if s >= delta))
+    return filtered_sizes[0]
 
 
 if __name__=='__main__':
