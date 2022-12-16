@@ -109,7 +109,7 @@ def solvea(inp):
     return ans
 
 
-# This takes like 15 min to run, but w/e it works
+# This takes like 2 min to run, but w/e it works
 def solveb(inp):
     inp = inp.strip().split('\n')
    
