@@ -116,16 +116,8 @@ def dp(cache, bp, nore, nclay, nobs, ngeode, ore, clay, obs, time_left):
     cache[key] = ngeode + best
     return ngeode + best
 
-
-def calc_quality_level(bp, time=24):
-    print(f"Calculating for {bp}, time = {time}")
-    cache = dict()
-    best = dp(cache, bp, 1, 0, 0, 0, 0, 0, 0, time)
-    print(f"Best for {bp.idx} was {best}")
-    return bp.idx * best 
-
    
-def best(bp, time=32): 
+def best(bp, time):
     print(f"Calculating for {bp}, time = {time}")
     cache = dict()
     best = dp(cache, bp, 1, 0, 0, 0, 0, 0, 0, time)
@@ -134,7 +126,7 @@ def best(bp, time=32):
 
 
 def solvea(inp):
-    return sum(calc_quality_level(bp) for bp in inp) 
+    return sum((i+1) * best(bp, 24) for i, bp in enumerate(inp))
 
 
 # This took like 1m30s to run
@@ -143,10 +135,10 @@ def solve(inp):
 
 
 if __name__=='__main__':
-    #example_ans = solvea(example_blueprints)
-    #print(f'example:\n {example_ans}')
-    #actual_ans = solvea(actual_blueprints)
-    #print(f'actual:\n {actual_ans}')
+    example_ans = solvea(example_blueprints)
+    print(f'example:\n {example_ans}')
+    actual_ans = solvea(actual_blueprints)
+    print(f'actual:\n {actual_ans}')
 
 
     actual_ans = solve(actual_blueprints[:3])
