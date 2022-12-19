@@ -137,7 +137,7 @@ def solvea(inp):
     return sum(calc_quality_level(bp) for bp in inp) 
 
 
-# This took like 10 minutes to run
+# This took like 1m30s to run
 def solve(inp):
     return prod(best(bp, 32) for bp in inp) 
 
