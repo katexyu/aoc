@@ -50,42 +50,18 @@ def categorize_points50(grid):
     faces = defaultdict(list)
     bounds = dict()
 
-    lower = 1000000
-    for y in range(50):
-        cnt = 0
-        for x, char in enumerate(grid[y]):
-            if char != ' ':
-                lower = min(x, lower)
-                face = 1 if cnt < 50 else 2
+    bounds[1] = ((0, 50), (50, 100))
+    bounds[2] = ((0, 50), (100, 150))
+    bounds[3] = ((50, 100), (50, 100))
+    bounds[4] = ((100, 150), (0, 50))
+    bounds[5] = ((100, 150), (50, 100))
+    bounds[6] = ((150, 200), (0, 50))
 
-                faces[(y,x)] = face
-                cnt += 1
-    bounds[1] = ((0, 50), (lower, lower+50))
-    bounds[2] = ((0, 50), (lower+50, lower+100))
-    bounds[3] = ((50, 100), (lower, lower+50))
-    bounds[4] = ((100, 150), (lower-50, lower))
-    bounds[5] = ((100, 150), (lower, lower+50))
-    bounds[6] = ((150, 200), (lower-50, lower))
-
-    for y in range(50, 100):
-         for x, char in enumerate(grid[y]):
-
-            if char != ' ':
-                faces[(y,x)] = 3
-                faces[2].append((y,x))
-
-    for y in range(100, 150):
-        cnt = 0
-        for x, char in enumerate(grid[y]):
-            if char != ' ':
-                face = 4 if cnt < 50 else 5
-                faces[(y,x)] = face
-                cnt += 1
-
-    for y in range(150, 200):
-         for x, char in enumerate(grid[y]):
-            if char != ' ':
-                faces[(y,x)] = 6
+    for face, b in bounds.items():
+        y, x = b
+        for i in range(y[0], y[1]):
+            for j in range(x[0], x[1]):
+                faces[(i, j)] = face
 
     return faces, bounds
 
@@ -94,48 +70,18 @@ def categorize_points4(grid):
     faces = defaultdict(list)
     bounds = dict()
 
-    lower = 1000000
-    for y in range(4):
-        cnt = 0
-        for x, char in enumerate(grid[y]):
-            if char != ' ':
-                lower = min(x, lower)
-                face = 1 if cnt < 4 else 2
+    bounds[1] = ((0, 4), (8, 12))
+    bounds[2] = ((4, 8), (0, 4))
+    bounds[3] = ((4, 8), (4, 8))
+    bounds[4] = ((4, 8), (8, 12))
+    bounds[5] = ((8, 12), (8, 12))
+    bounds[6] = ((8, 12), (12, 16))
 
-                faces[(y,x)] = face
-                cnt += 1
-    bounds[1] = ((0, 4), (lower, lower+4))
-    bounds[2] = ((4, 8), (lower-8, lower-4))
-    bounds[3] = ((4, 8), (lower-4, lower))
-    bounds[4] = ((4, 8), (lower, lower+4))
-    bounds[5] = ((8, 12), (lower, lower+4))
-    bounds[6] = ((8, 12), (lower+4, lower+8))
-    for y in range(4):
-       for x, char in enumerate(grid[y]):
-          if char != ' ':
-              faces[(y, x)] = 1
-
-    for y in range(4,8):
-        cnt = 0
-        for x, char in enumerate(grid[y]):
-            if char != ' ':
-                face = -1
-                if cnt < 4:
-                    face = 2
-                elif 4 <= cnt < 8:
-                    face = 3
-                else:
-                    face = 4
-                faces[(y,x)] = face
-                cnt += 1
-
-    for y in range(8, 12):
-        cnt = 0
-        for x, char in enumerate(grid[y]):
-            if char != ' ':
-                face = 5 if cnt < 4 else 6
-                faces[(y,x)] = face
-                cnt += 1
+    for face, b in bounds.items():
+        y, x = b
+        for i in range(y[0], y[1]):
+            for j in range(x[0], x[1]):
+                faces[(i, j)] = face
 
     return faces, bounds
 
