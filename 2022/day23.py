@@ -91,32 +91,30 @@ actual = """
 #.##.#.##...#...#.#.#.###.#..##.##..##.#....#..#.....#...####.#.#...#.##
 """
 
-def do_round(elves, grid, priority):
+def do_round(elves, priority):
     proposals = {}
-    locations = set(elves.values())
-    for elf in elves:
-        x, y = elves[elf]
-        if all((i, j) not in locations for i, j in neighbors(x, y)):
+    for x, y in elves:
+        if all((i, j) not in elves for i, j in neighbors(x, y)):
             continue
         possible = [None, None, None, None]
         # North
-        no_north = all((x+dx, y-1) not in locations for dx in range(-1, 2))
+        no_north = all((x+dx, y-1) not in elves for dx in range(-1, 2))
         if no_north:
             possible[0] = (x, y-1)
-        no_south = all((x+dx, y+1) not in locations for dx in range(-1, 2))
+        no_south = all((x+dx, y+1) not in elves for dx in range(-1, 2))
         if no_south:
             possible[1] = (x, y+1)
-        no_west = all((x-1, y+dy) not in locations for dy in range(-1, 2))
+        no_west = all((x-1, y+dy) not in elves for dy in range(-1, 2))
         if no_west:
             possible[2] = (x-1, y)
-        no_east = all((x+1, y+dy) not in locations for dy in range(-1, 2))
+        no_east = all((x+1, y+dy) not in elves for dy in range(-1, 2))
         if no_east:
             possible[3] = (x+1, y)
         proposal = None
         for i in range(4):
             idx = (priority + i) % 4
             if possible[idx] is not None:
-                proposals[elf] = possible[idx]
+                proposals[(x, y)] = possible[idx]
                 break
 
     cnt = Counter(proposals.values())
@@ -145,29 +143,25 @@ def print_grid(elves):
 def solvea(inp):
     inp = inp.strip().split('\n')
     grid = list(map(list, inp))
-    elves = {}
+    elves = set()
     cnt = 0
     for y in range(len(grid)):
         for x in range(len(grid[0])):
             if grid[y][x] == '#':
-                elves[cnt] = (x, y)
+                elves.add((x,y))
                 cnt += 1
-
-    priorities = {e:0 for e in elves}
 
     cnt = 0
     rounds = 10
     while cnt < rounds:
-        moves = do_round(elves, grid, cnt % 4)
+        moves = do_round(elves, cnt % 4)
         for elf, move in moves.items():
-            x, y = elves[elf]
-            nx, ny = move
-            elves[elf] = (nx, ny)
+            elves.remove(elf)
+            elves.add(move)
         cnt += 1
 
-    pos = elves.values()
-    miny, maxy = min(p[0] for p in pos), max(p[0] for p in pos)
-    minx, maxx = min(p[1] for p in pos), max(p[1] for p in pos)
+    miny, maxy = min(p[0] for p in elves), max(p[0] for p in elves)
+    minx, maxx = min(p[1] for p in elves), max(p[1] for p in elves)
     
     ans = (maxx - minx + 1) * (maxy - miny + 1) - len(elves)
     return ans
@@ -176,25 +170,20 @@ def solvea(inp):
 def solve(inp):
     inp = inp.strip().split('\n')
     grid = list(map(list, inp))
-    elves = {}
-    cnt = 0
+    elves = set()
     for y in range(len(grid)):
         for x in range(len(grid[0])):
             if grid[y][x] == '#':
-                elves[cnt] = (x, y)
-                cnt += 1
-
-    priorities = {e:0 for e in elves}
+                elves.add((x,y))
 
     cnt = 0
     while True:
-        moves = do_round(elves, grid, cnt % 4)
+        moves = do_round(elves, cnt % 4)
         if len(moves) == 0:
             return cnt +1 
         for elf, move in moves.items():
-            x, y = elves[elf]
-            nx, ny = move
-            elves[elf] = (nx, ny)
+            elves.remove(elf)
+            elves.add(move)
         cnt += 1
 
 
