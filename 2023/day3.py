@@ -166,11 +166,7 @@ actual = """
 def solve1(inp):
     inp = inp.strip().split('\n')
 
-    mapping = {}
-    for j in range(len(inp)):
-        for i in range(len(inp[j])):
-            mapping[(i, j)] = inp[j][i]
-
+    mapping = to_grid_map(inp)
 
     total = 0
     for j in range(len(inp)):
@@ -216,10 +212,7 @@ def check_adjacent(i, j, mapping):
 def solve2(inp):
     inp = inp.strip().split('\n')
 
-    mapping = dict()
-    for j in range(len(inp)):
-        for i in range(len(inp[j])):
-            mapping[(i, j)] = inp[j][i]
+    mapping = to_grid_map(inp)
 
     total = 0
     gear_map = defaultdict(list)
