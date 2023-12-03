@@ -20,6 +20,17 @@ def print_grid_map(mapping):
         print(''.join(mapping[(x, y)] for x in range(max_x)))
 
 
+def print_sparse_grid_map(mapping):
+    """
+    Given a sparse mapping of coordinate to value, print it out
+    """
+    max_y = max(k[1] for k in mapping.keys())
+    max_x = max(k[0] for k in mapping.keys())
+
+    for y in range(max_y):
+        print(''.join(mapping.get((x, y), ' ') for x in range(max_x)))
+
+
 def print_grid(g):
     for l in g:
         print(l)
