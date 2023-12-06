@@ -13,17 +13,30 @@ actual = """
 """
 
 
-def solve(inp):
+def solve1(inp):
     inp = inp.strip().split('\n')
 
     ans = ''
     return ans 
 
 
-if __name__=='__main__':
-    example_ans = solve(example)
-    print(f'example:\n {example_ans}')
+def solve2(inp):
+    inp = inp.strip().split('\n')
 
-    actual_ans = solve(actual)
-    print(f'actual:\n {actual_ans}')
+    ans = ''
+    return ans
+
+
+if __name__=='__main__':
+    example_ans = solve1(example)
+    print(f'example 1:\n {example_ans}')
+
+    actual_ans = solve1(actual)
+    print(f'actual 1:\n {actual_ans}')
+
+    example_ans = solve1(example)
+    print(f'example 2:\n {example_ans}')
+
+    actual_ans = solve1(actual)
+    print(f'actual 2:\n {actual_ans}')
 
