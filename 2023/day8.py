@@ -812,7 +812,6 @@ def solve1(inp):
     cur = 'AAA'
     num_steps = 0
     for c in lr:
-        do_step 
         nxt = steps[cur]
         if c == "L":
             cur = nxt[0]
