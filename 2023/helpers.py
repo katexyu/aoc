@@ -16,8 +16,8 @@ def print_grid_map(mapping):
     max_y = max(k[1] for k in mapping.keys())
     max_x = max(k[0] for k in mapping.keys())
 
-    for y in range(max_y):
-        print(''.join(mapping[(x, y)] for x in range(max_x)))
+    for y in range(max_y + 1):
+        print(''.join(mapping[(x, y)] for x in range(max_x + 1)))
 
 
 def print_sparse_grid_map(mapping):
