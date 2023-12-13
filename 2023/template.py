@@ -34,9 +34,9 @@ if __name__=='__main__':
     actual_ans = solve1(actual)
     print(f'actual 1:\n {actual_ans}')
 
-    example_ans = solve1(example)
+    example_ans = solve2(example)
     print(f'example 2:\n {example_ans}')
 
-    actual_ans = solve1(actual)
+    actual_ans = solve2(actual)
     print(f'actual 2:\n {actual_ans}')
 
