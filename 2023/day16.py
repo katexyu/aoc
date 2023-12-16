@@ -6,16 +6,16 @@ from heapq import heappush, heappop, heappushpop, heapify, heapreplace
 from functools import cache
 
 
-example = """
+example = r"""
 .|...\....
 |.-.\.....
 .....|-...
 ........|.
 ..........
-.........\\
-..../.\\\\..
+.........\
+..../.\\..
 .-.-/..|..
-.|....-|.\\
+.|....-|.\
 ..//.|....
 """
 
