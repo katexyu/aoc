@@ -9,8 +9,8 @@ from functools import cache
 example = r"""
 """
 
-actual = r"""
-"""
+with open('day19.txt', 'r') as f:
+    actual = f.read()
 
 
 def solve1(inp):
