@@ -1424,9 +1424,9 @@ def solve1(inp):
     part2 = inp[1].split('\n')
     rules = [list(map(int, x.split('|'))) for x in part1]
     pages = [list(map(int, x.split(','))) for x in part2]
-    rdict = defaultdict(list)
+    rdict = defaultdict(set)
     for r in rules:
-        rdict[r[0]].append(r[1])
+        rdict[r[0]].add(r[1])
 
     s = 0
     for p in pages:
@@ -1468,9 +1468,9 @@ def solve2(inp):
     part2 = inp[1].split('\n')
     rules = [list(map(int, x.split('|'))) for x in part1]
     pages = [list(map(int, x.split(','))) for x in part2]
-    rdict = defaultdict(list)
+    rdict = defaultdict(set)
     for r in rules:
-        rdict[r[0]].append(r[1])
+        rdict[r[0]].add(r[1])
     s = 0
     for i, p in enumerate(pages):
         if not verify_order(rdict, p):
