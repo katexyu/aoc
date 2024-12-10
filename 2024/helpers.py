@@ -8,6 +8,16 @@ def to_grid_map(inp):
             mapping[(i, j)] = c
     return mapping
 
+def to_int_grid_map(inp):
+    """
+    Converts a list of input lines to a dict of coordinates to values cast to int.
+    """
+    mapping = dict()
+    for j, line in enumerate(inp):
+        for i, c in enumerate(line):
+            mapping[(i, j)] = int(c)
+    return mapping
+
 
 def print_grid_map(mapping):
     """
