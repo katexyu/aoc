@@ -47,3 +47,26 @@ def print_grid(g):
     for l in g:
         print(l)
 
+
+DELTAS4 = [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+]
+
+
+def valid_neighbors4(m, x, y):
+    for dx, dy in DELTAS4:
+        if (x+dx, y+dy) in m:
+            yield (x+dx, y+dy)
+
+
+def valid_neighbors8(m, x, y):
+    for dx in range(-1, 2):
+        for dy in range(-1, 2):
+            if dx == 0 and dy == 0:
+                continue
+            if (x+dx, y+dy) in m:
+                yield (x+dx, y+dy)
+
