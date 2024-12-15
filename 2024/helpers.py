@@ -19,6 +19,13 @@ def to_int_grid_map(inp):
     return mapping
 
 
+def find_starting_coords(mapping, target):
+    for c, v in mapping.items():
+        if v == target:
+            return c
+    return -1, -1
+
+
 def print_grid_map(mapping):
     """
     Given a mapping of coordinate to value, print it out

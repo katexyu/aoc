@@ -110,11 +110,7 @@ def solve1(inp):
     m = to_grid_map(inp[0].split('\n'))
     dirs = inp[1].strip('\n')
 
-    x,y = -1, -1
-    for c, v in m.items():
-        if v == '@':
-            x, y = c
-            break
+    x,y = find_starting_coords(m, '@')
 
     for d in dirs:
         x, y = do_step(m, d, x, y)
@@ -236,11 +232,7 @@ def solve2(inp):
     print_grid_map(m)
     dirs = inp[1].strip('\n')
 
-    x,y = -1, -1
-    for c, v in m.items():
-        if v == '@':
-            x, y = c
-            break
+    x,y = find_starting_coords(m, '@')
 
     for d in dirs:
         x, y = do_step2(m, d, x, y)
