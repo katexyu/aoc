@@ -46,7 +46,7 @@ def generate_secret_num(num, iterations=2000):
     return num
 
 
-def price_diffs(num):
+def update_price_diffs(num, delta_sums):
     prices = [num%10]
 
     for i in range(2000):
@@ -57,12 +57,12 @@ def price_diffs(num):
     for n1, n2 in zip(prices[:-1], prices[1:]):
         diffs.append(n2-n1)
 
-    first_instance = defaultdict(int)
+    seen_first_instance = set()
     for i in range(4, len(diffs)+1):
         last_4_diffs = tuple(diffs[i-4:i])
-        if last_4_diffs not in first_instance:
-            first_instance[last_4_diffs] = prices[i]
-    return first_instance
+        if last_4_diffs not in seen_first_instance:
+            seen_first_instance.add(last_4_diffs)
+            delta_sums[last_4_diffs] += prices[i]
 
 
 def solve1(inp):
@@ -86,21 +86,14 @@ def solve2(inp):
     nums = [int(x) for x in inp]
 
     all_first = []
-    all_possible = set()
+    # all_possible = set()
+
+    delta_sums = defaultdict(int)
 
     for n in nums:
-        first_instances = price_diffs(n)
-        all_first.append(first_instances)
-        all_possible.update(first_instances.keys())
+        update_price_diffs(n, delta_sums)
 
-    most = -1
-    print(f"Checking {len(all_possible)} options")
-    for i, a in enumerate(all_possible):
-        print(f"Checking {i}th option")
-        res = num_bananas_for_deltas(a, all_first)
-        most = max(most, res)
-
-    return most
+    return max(delta_sums.values())
 
 if __name__=='__main__':
     example_ans = solve1(example)
